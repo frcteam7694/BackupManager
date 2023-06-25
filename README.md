@@ -1,4 +1,5 @@
 # BackupManager
+![Screenshot](backupmanager.PNG)
 ## Easy Install
 Coming Soon
 ## Manual Install
