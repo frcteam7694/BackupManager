@@ -1,0 +1,117 @@
+@import url(font/AnonymousPro-Regular.ttf);
+@import url(font/AnonymousPro-Bold.ttf);
+
+body {
+  background-color: #313131;
+  color: #ffffff;
+  font-family: 'Anonymous Pro', monospace;
+  overflow: hidden;
+}
+
+header {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 33vw;
+  height: 100vh;
+  background-color: #1b1b1b;
+}
+
+h1 {
+  font-size: 3vw;
+  text-align: center;
+}
+
+textarea {
+  resize: none;
+  border: none;
+  outline: none;
+  padding: 5vh;
+  margin: 0 5vh;
+  width: calc(33vw - 20vh);
+  height: calc(35vh - 5vw);
+  background-color: #313131;
+  border-radius: 3vh;
+  color: #ffffff;
+  font-family: 'Anonymous Pro', monospace;
+  font-size: 2vw;
+  font-weight: 700;
+}
+
+textarea::-webkit-scrollbar {
+  display: none;
+}
+
+.buttons {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 33vw;
+  height: 50vh;
+}
+
+button {
+  border: none;
+  outline: none;
+  padding: 0;
+  margin: 5vh 5vh 0 5vh;
+  width: calc(33vw - 10vh);
+  height: 10vh;
+  --background-color: #313131;
+  background-color: var(--background-color);
+  border-radius: 5vh;
+  color: #ffffff;
+  font-family: 'Anonymous Pro', monospace;
+  font-size: 2vw;
+  font-weight: 700;
+  text-align: center;
+  cursor: pointer;
+  transition: all .5s;
+}
+
+button.enabled {
+  --background-color: #0c6113;
+}
+
+button:hover {
+  box-shadow: 0 0 5vw var(--background-color);
+}
+
+main {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 67vw;
+  height: 100vh;
+  overflow-x: hidden;
+  overflow-y: scroll;
+}
+
+main::-webkit-scrollbar {
+  background-color: #313131;
+}
+
+main::-webkit-scrollbar-thumb {
+  background-color: #1b1b1b;
+  border-radius: 100px;
+}
+
+.backup {
+  padding: 1vw;
+  width: calc(100% - 2vw);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.backup:not(:last-child) {
+  border-bottom: 1px solid #1b1b1b;
+}
+
+.backup.comp {
+  background-color: #1b1b1b;
+}
+
+.backup.selected {
+  background-color: #0c6113;
+}
