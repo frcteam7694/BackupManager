@@ -16,7 +16,8 @@ const createWindow = () => {
       contextIsolation: false
     },
     resizable: false,
-    autoHideMenuBar: true
+    autoHideMenuBar: true,
+    icon: getIcon()
   });
 
   // and load the index.html of the app.
@@ -47,3 +48,11 @@ app.on('activate', () => {
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and import them here.
+
+function getIcon() {
+  // if (process.platform == 'darwin') {
+    // return path.join(path.join(__dirname, 'icons'), 'icon.icns');
+  // } else {
+    return path.join(path.join(__dirname, 'icons'), 'icon.ico');
+  // }
+}

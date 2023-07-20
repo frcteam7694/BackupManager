@@ -10,7 +10,7 @@
 
 <body>
   <header>
-    <h1 id="time">7694-12-31-23-59</h1>
+    <h1 id="time">7694-XX-XX-XX-XX</h1>
     <textarea id="desc"></textarea>
     <div class="buttons">
       <button id="comp" onclick="comp()">Comp</button>
@@ -20,6 +20,22 @@
   </header>
   <main>
   </main>
+  <div id="settingsbtn" onclick="settings(true)">
+    <img src="icons/settings.svg">
+  </div>
+  <div id="overlay"></div>
+  <div id="settings">
+    <h1>Settings</h1>
+    <h2>backups.json</h2>
+    <input type="text" id="backupsFile">
+    <h2>backups/</h2>
+    <input type="text" id="backupsDir">
+    <h2>code/</h2>
+    <input type="text" id="codeDir">
+    <div id="exitbtn" onclick="settings(false)">
+      <img src="icons/exit.svg">
+    </div>
+  </div> 
 </body>
 
 </html>

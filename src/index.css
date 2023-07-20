@@ -22,20 +22,24 @@ h1 {
   text-align: center;
 }
 
-textarea {
+textarea,
+input[type="text"] {
   resize: none;
   border: none;
   outline: none;
-  padding: 5vh;
-  margin: 0 5vh;
-  width: calc(33vw - 20vh);
-  height: calc(35vh - 5vw);
-  background-color: #313131;
   border-radius: 3vh;
   color: #ffffff;
   font-family: 'Anonymous Pro', monospace;
   font-size: 2vw;
   font-weight: 700;
+}
+
+textarea {
+  margin: 0 5vh;
+  padding: 5vh;
+  width: calc(33vw - 20vh);
+  height: calc(35vh - 5vw);
+  background-color: #313131;
 }
 
 textarea::-webkit-scrollbar {
@@ -96,6 +100,16 @@ main::-webkit-scrollbar-thumb {
   border-radius: 100px;
 }
 
+main[scroll="top"]::-webkit-scrollbar-thumb {
+   background-color: #1b1b1b;
+   border-radius: 0 0 100px 100px;
+}
+
+main[scroll="bottom"]::-webkit-scrollbar-thumb {
+  background-color: #1b1b1b;
+   border-radius: 100px 100px 0 0;
+}
+
 .backup {
   padding: 1vw;
   width: calc(100% - 2vw);
@@ -114,4 +128,106 @@ main::-webkit-scrollbar-thumb {
 
 .backup.selected {
   background-color: #0c6113;
+}
+
+#settingsbtn,
+#exitbtn {
+  position: absolute;
+  right: 3vh;
+  background-color: #1b1b1b;
+  width: 6vh;
+  height: 6vh;
+  border-radius: 100%;
+  cursor: pointer;
+}
+
+#settingsbtn {
+  bottom: 3vh;
+}
+
+#settingsbtn > img,
+#exitbtn > img {
+  position: absolute;
+  top: 1vh;
+  left: 1vh;
+  width: 4vh;
+  height: 4vh;
+  filter: invert(96%) sepia(3%) saturate(121%) hue-rotate(121deg) brightness(118%) contrast(100%); /* #ffffff */
+  transition:
+    filter .5s,
+    transform .5s;
+}
+
+#settingsbtn > img {
+  transform: translate(.5px, .5px) rotate(0) scale(100%);
+}
+
+#settingsbtn:hover > img {
+  transform: translate(.5px, .5px) rotate(60deg) scale(95%);
+  filter: invert(23%) sepia(100%) saturate(591%) hue-rotate(81deg) brightness(99%) contrast(96%); /* #0c6113 */
+}
+
+#overlay {
+  display: none;
+  position: absolute;
+  inset: 0;
+  background-color: rgba(0, 0, 0, .5);
+  opacity: 0;
+  transition: opacity .5s;
+}
+
+#settings {
+  display: none;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(90%);
+  width: 50vw;
+  height: 60vh;
+  background-color: #313131;
+  border-radius: 3vh;
+  box-shadow: rgba(0, 0, 0, .5) 0 0 5px;
+  padding: 5vh 15vh;
+  opacity: 0;
+  transition:
+    opacity .5s,
+    transform .25s;
+}
+
+h2 {
+  margin-left: 2vh;
+  font-size: 2vw;
+}
+
+input[type="text"] {
+  width: calc(100% - 4vh);
+  padding: 2vh;
+  background-color: #1b1b1b;
+}
+
+#overlay.block,
+#settings.block {
+  display: block;
+}
+
+#overlay.show {
+  opacity: 1;
+}
+
+#settings.show {
+  transform: translate(-50%, -50%) scale(100%);
+  opacity: 1;
+}
+
+#exitbtn {
+  top: 3vh;
+}
+
+#exitbtn > img {
+  transform: scale(100%) translate(1px, .5px);
+}
+
+#exitbtn:hover > img {
+  transform: scale(95%) translate(1px, .5px);
+  filter: invert(11%) sepia(80%) saturate(2212%) hue-rotate(347deg) brightness(93%) contrast(100%); /* #61130c */
 }
