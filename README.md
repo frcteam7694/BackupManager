@@ -14,6 +14,7 @@
 - Depending on your IDE, you may have to relaunch it to see the changes take effect.
 ## Easy Install
 Coming Soon
+(soon meaning possibly sometime)
 ## Manual Install
 ### 1. Clone this repository
 ### 2. Create a backups folder
