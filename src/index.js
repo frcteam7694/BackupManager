@@ -1,6 +1,6 @@
 const fs = require('fs-extra');
 const path = require('path');
-// const git = require('simple-git');
+const { simpleGit, CleanOptions } = require('simple-git');
 
 const time = document.querySelector('#time');
 const desc = document.querySelector('#desc')
@@ -10,43 +10,46 @@ const btnLoad = document.querySelector("#load");
 const list = document.querySelector('main');
 const overlay = document.querySelector("#overlay");
 const settingsModal = document.querySelector('#settings');
-const backupsFileInput = document.querySelector('#backupsFile');
-const backupsDirInput = document.querySelector('#backupsDir');
 const codeDirInput = document.querySelector('#codeDir');
+const remoteInput = document.querySelector('#remote');
 
-let backupsFile;
-let backupsDir;
 let codeDir;
+let remote;
+let lastCommit;
 
 let backups = [];
 let selected = -1;
-
 let inSettings = false;
 
 document.addEventListener('DOMContentLoaded', loadConfig);
 
+simpleGit().clean(CleanOptions.FORCE);
+let git;
+
 async function loadConfig() {
     const json = await fs.readJSONSync('config.json');
-    backupsFile = json.backupsFile;
-    backupsDir = json.backupsDir;
     codeDir = json.codeDir;
-    try {
-        let file = await fs.readFileSync(backupsFile, {encoding: 'utf8', flag: 'r'});
-        backups = JSON.parse(file);
-    } catch (e) {
-        backups = [];
-    }
+    remote = json.remote;
+    lastCommit = json.lastCommit;
+    git = simpleGit(codeDir, { binary: 'git' });
+    backups = (await git.log([lastCommit])).all
     list.innerHTML = '';
     for (let i = 0; i < backups.length; i++) {
-        list.innerHTML = `<div class="backup${backups[i].comp ? ' comp' : ''}" onclick="select(${i})">${backups[i].time} ${backups[i].desc}</div>` + list.innerHTML;
+        list.innerHTML += `<div class="backup${backups[i].message.startsWith('!') ? ' comp' : ''}" onclick="select(${i})">${getTime(i)} ${backups[i].message.substring(1)}</div>`;
     }
+    let isRepo = await git.checkIsRepo();
+    if (!isRepo) {
+        await git.init();
+        await git.addRemote('offline', gitRemote);
+    }
+
 }
 
 async function saveConfig() {
     await fs.writeJSONSync('config.json', {
-        backupsFile,
-        backupsDir,
-        codeDir
+        codeDir,
+        remote,
+        lastCommit
     });
     loadConfig();
 }
@@ -61,23 +64,25 @@ function comp() {
 }
 
 async function save() {
+    await git.add('.');
+    let hash = await git.commit(generateCommitMsg());
+    await git.push(['-u', 'offline', 'master']);
     if (selected != -1) {
         deSelect();
         return;
     }
-    let time = getCurrentTime() + '';
-    await fs.copySync(codeDir, path.join(backupsDir, time));
-    backups.push({time, 'desc': desc.value, 'comp': btnComp.classList.contains('enabled')});
-    await fs.writeFileSync(backupsFile, JSON.stringify(backups));
-    loadConfig();
-    deSelect();
+    lastCommit = hash.commit.split(' ')[1];
+    saveConfig();
+    desc.value = '';
+    if (btnComp.classList.contains('enabled')) {
+        btnComp.classList.remove('enabled');
+    }
 }
 
 async function load() {
     if (selected == -1) return;
     if (!confirm('Save the code before loading an old version.')) return;
-    await fs.removeSync(codeDir);
-    await fs.copySync(path.join(backupsDir, backups[selected].time), codeDir);
+    git.checkout(backups[selected].hash, '.')
 }
 
 function select(i) {
@@ -85,10 +90,10 @@ function select(i) {
         deSelect();
     } else {
         selected = i;
-        time.innerText = backups[i].time;
+        time.innerText = getTime(i);
         if (!desc.hasAttribute('readonly')) desc.setAttribute('readonly', '');
-        desc.value = backups[i].desc;
-        if (backups[i].comp) {
+        desc.value = backups[i].message.substring(1);
+        if (backups[i].message.startsWith('!')) {
             if (!btnComp.classList.contains('enabled')) btnComp.classList.add('enabled');
         } else {
             if (btnComp.classList.contains('enabled')) btnComp.classList.remove('enabled');
@@ -107,9 +112,8 @@ function settings(on) {
     if (on) {
         overlay.classList.add('block');
         settingsModal.classList.add('block');
-        backupsFileInput.value = backupsFile;
-        backupsDirInput.value = backupsDir;
         codeDirInput.value = codeDir;
+        remoteInput.value = remote;
         setTimeout(() => {
             overlay.classList.add('show');
             settingsModal.classList.add('show');
@@ -117,9 +121,8 @@ function settings(on) {
     } else {
         overlay.classList.remove('show');
         settingsModal.classList.remove('show');
-        backupsFile = backupsFileInput.value;
-        backupsDir = backupsDirInput.value;
         codeDir = codeDirInput.value;
+        remote = remoteInput.value;
         setTimeout(() => {
             overlay.classList.remove('block');
             settingsModal.classList.remove('block');
@@ -154,6 +157,19 @@ function update() {
     if (selected == -1) time.innerText = getCurrentTime();
     scroll();
     requestAnimationFrame(update);
+}
+
+function generateCommitMsg() {
+    let commitComp = btnComp.classList.contains('enabled') ? '!' : '#';
+    let commitDesc = desc.value;
+    return commitComp + commitDesc;
+}
+
+function getTime(i) {
+    return backups[i].date
+        .slice(0, -9)
+        .replace('T', '-')
+        .replace(':', '-');
 }
 
 function getCurrentTime() {
