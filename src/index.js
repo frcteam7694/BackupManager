@@ -27,7 +27,7 @@ simpleGit().clean(CleanOptions.FORCE);
 let git;
 
 async function loadConfig() {
-    const json = await fs.readJSONSync(path.join(getExecutablePath(), 'config.json'));
+    const json = await fs.readJSONSync(path.join(getExecutableRootPath(), 'config.json'));
     codeDir = json.codeDir;
     remote = json.remote;
     lastCommit = json.lastCommit;
@@ -46,7 +46,7 @@ async function loadConfig() {
 }
 
 async function saveConfig() {
-    await fs.writeJSONSync(path.join(getExecutablePath(), 'config.json'), {
+    await fs.writeJSONSync(path.join(getExecutableRootPath(), 'config.json'), {
         codeDir,
         remote,
         lastCommit
@@ -184,7 +184,7 @@ function getCurrentTime() {
     return `${year}-${month}-${day}-${hours}-${minutes}`;
 }
 
-function getExecutablePath() {
+function getExecutableRootPath() {
     let parts = process.execPath.split(path.sep);
     if (process.platform === 'darwin') {
         parts = process.execPath.split('.app')[0].split(path.sep);
