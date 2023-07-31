@@ -1,1 +1,5 @@
-{"backupsFile":"C:\\Users\\nwcrobotics\\Desktop\\Seasons\\RoboticsSeason2023\\BackupManager\\backups.json","backupsDir":"C:\\Users\\nwcrobotics\\Desktop\\Seasons\\RoboticsSeason2023\\BackupManager\\backups","codeDir":"C:\\Users\\nwcrobotics\\Desktop\\Seasons\\RoboticsSeason2023\\BackupManager\\src"}
+{
+  "codeDir": "BASE DIRECTORY OF YOUR CODE",
+  "remote": "PATH TO A GIT REPOSITORY STORED ON A FLASH DRIVE OR ON THE FILESYSTEM",
+  "lastCommit": "master"
+}
