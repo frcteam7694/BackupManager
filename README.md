@@ -31,4 +31,4 @@ Other folders may work as long as they contain the code and stay consistent.
 Assuming you have [NodeJS](https://nodejs.org) installed, type the command ```npm i``` into your terminal.
 ### 4. Build the Executable
 Next run the command ```npm run make``` to build your executable.
-### 5. Move ```config.json``` into the same directory as the executable
+### 5. Move config.json into the same directory as the executable
